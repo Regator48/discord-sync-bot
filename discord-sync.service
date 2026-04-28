@@ -1,0 +1,15 @@
+[Unit]
+Description=Discord Sync Bot
+After=network.target
+
+[Service]
+Type=simple
+User=regator47
+WorkingDirectory=~/discord-sync-bot
+ExecStart=~/discord-sync-bot/venv/bin/python ~/discord-sync-bot/bot.py
+Environment=DISCORD_TOKEN=
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
