@@ -1,6 +1,7 @@
 import os
 import json
 import asyncio
+import random
 import discord
 from discord import app_commands
 from discord import Webhook
@@ -65,6 +66,23 @@ async def sync_message(message, client):
 
 @client.event
 async def on_message(message):
+    if message.author.bot:
+        return
+    
+    msg_lower = message.content.strip().lower()
+    if msg_lower == "wallahi":
+        responses = [
+            "good goy 😊", 
+            "+7k from israel gov 💰", 
+            "zion dong 🐀", 
+            "israel we outside ✌️",
+            "occupation detected 📡",
+            "your tax dollars at work 💸",
+            "IDF funding 🔫",
+            "occupation go brrr 🚜"
+        ]
+        await message.reply(random.choice(responses))
+    
     await sync_message(message, client)
 
 @client.event
@@ -153,6 +171,38 @@ async def links(interaction: discord.Interaction):
 @client.tree.command()
 async def channelid(interaction: discord.Interaction):
     await interaction.response.send_message(f"This channel's ID: `{interaction.channel.id}`", ephemeral=True)
+
+@client.tree.command()
+async def ping(interaction: discord.Interaction):
+    await interaction.response.send_message("Pong!", ephemeral=True)
+
+@client.tree.command()
+async def syncexisting(interaction: discord.Interaction, target_channel_id: str, limit: int = 100):
+    try:
+        target_channel_id = int(target_channel_id.strip().replace("<#", "").replace(">", ""))
+    except ValueError:
+        await interaction.response.send_message("Invalid channel ID. Use format: 123456789012345678", ephemeral=True)
+        return
+    
+    await interaction.response.send_message(f"Syncing {limit} messages...", ephemeral=True)
+    
+    target = client.get_channel(target_channel_id)
+    if not target:
+        await interaction.followup.send("Target not found!", ephemeral=True)
+        return
+    
+    count = 0
+    async for msg in interaction.channel.history(limit=limit):
+        if msg.author.bot:
+            continue
+        if msg.attachments:
+            f = await msg.attachments[0].to_file()
+            await target.send(content=f"**{msg.author.display_name}**: {msg.content or ''}", file=f)
+        else:
+            await target.send(content=f"**{msg.author.display_name}**: {msg.content}")
+        count += 1
+    
+    await interaction.followup.send(f"Synced {count} messages", ephemeral=True)
 
 if __name__ == "__main__":
     token = os.getenv("DISCORD_TOKEN")
