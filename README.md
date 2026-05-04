@@ -1,7 +1,5 @@
 # Discord Sync Bot
 
-> Built with AI vibe coding 🧙‍♂️
-
 A Discord bot to sync messages between channels across different servers.
 
 ## Setup
