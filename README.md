@@ -1,5 +1,7 @@
 # Discord Sync Bot
 
+> Built with AI vibe coding 🧙‍♂️
+
 A Discord bot to sync messages between channels across different servers.
 
 ## Setup
@@ -37,6 +39,8 @@ A Discord bot to sync messages between channels across different servers.
 - `/unlink <channel_id>` - Remove link
 - `/links` - Show linked channels
 - `/channelid` - Get current channel ID
+- `/ping` - Pong!
+- `/syncexisting <channel_id> [limit]` - Sync past messages
 
 ## Usage
 
