@@ -1,7 +1,6 @@
 import os
 import json
 import asyncio
-import random
 import discord
 from discord import app_commands
 from discord import Webhook
@@ -23,7 +22,7 @@ class SyncBot(discord.Client):
         intents = discord.Intents.default()
         intents.message_content = True
         super().__init__(intents=intents)
-        self.tree = app_commands.CommandTree(self)
+        self.tree = app_classes.CommandTree(self)
 
     async def setup_hook(self):
         await self.tree.sync()
@@ -66,23 +65,6 @@ async def sync_message(message, client):
 
 @client.event
 async def on_message(message):
-    if message.author.bot:
-        return
-    
-    msg_lower = message.content.strip().lower()
-    if msg_lower == "wallahi":
-        responses = [
-            "good goy 😊", 
-            "+7k from israel gov 💰", 
-            "zion dong 🐀", 
-            "israel we outside ✌️",
-            "occupation detected 📡",
-            "your tax dollars at work 💸",
-            "IDF funding 🔫",
-            "occupation go brrr 🚜"
-        ]
-        await message.reply(random.choice(responses))
-    
     await sync_message(message, client)
 
 @client.event
